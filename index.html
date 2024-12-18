@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>YouTube 動画 埋め込み</title>
+  <title>TubeHTML</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -14,60 +14,91 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
+      height: 100vh;
+      overflow: hidden;
     }
     h1 {
       font-size: 24px;
       color: #333;
+      margin-top: 20px;
     }
     .video-container {
       width: 100%;
       max-width: 640px;
       height: 360px;
       margin-top: 20px;
+      background-color: #000;
+      border-radius: 10px;
+      overflow: hidden;
     }
     .input-container {
       margin-top: 20px;
+      width: 100%;
+      max-width: 640px;
+      display: flex;
+      justify-content: center;
     }
     .input-container input {
       padding: 10px;
       width: 80%;
-      max-width: 600px;
+      max-width: 500px;
+      border: 2px solid #ccc;
+      border-radius: 5px;
     }
     .input-container button {
       padding: 10px 20px;
       margin-left: 10px;
       cursor: pointer;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+    .input-container button:hover {
+      background-color: #45a049;
+    }
+    .error-message {
+      color: red;
+      margin-top: 10px;
+      font-size: 14px;
     }
   </style>
 </head>
 <body>
-  <h1>YouTube 動画 埋め込み</h1>
+  <h1>TubeHTML</h1>
 
   <div class="input-container">
     <input type="text" id="youtube-url" placeholder="YouTube URLを入力してください">
     <button onclick="loadVideo()">動画を表示</button>
   </div>
+  <div class="error-message" id="error-message"></div>
 
   <div class="video-container" id="video-container">
     <!-- 動画がここに埋め込まれます -->
   </div>
 
   <script>
+    // 動画IDを抽出する関数
     function extractVideoID(url) {
       const regex = /(?:https?:\/\/(?:www\.)?youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|(?:watch\?v=|(?:\/v\/)))([a-zA-Z0-9_-]{11}))/;
       const match = url.match(regex);
       return match ? match[1] : null;
     }
 
+    // 動画を表示する関数
     function loadVideo() {
       const url = document.getElementById('youtube-url').value;
       const videoID = extractVideoID(url);
 
       if (videoID) {
         const container = document.getElementById('video-container');
-        container.innerHTML = `<iframe width="100%" height="100%" src="https://www.youtube.com/embed/${videoID}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+        const iframe = `<iframe width="100%" height="100%" src="https://www.youtube.com/embed/${videoID}?autoplay=1&controls=1&rel=0&showinfo=0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+        container.innerHTML = iframe;
+        document.getElementById('error-message').innerText = ''; // エラーメッセージをクリア
       } else {
-        alert('YouTubeのURLを正しく入力してください。');
+        document.getElementById('error-message').innerText = 'YouTubeのURLを正しく入力してください。';
+        document.getElementById('video-container').innerHTML = ''; // 動画をクリア
       }
     }
   </script>
