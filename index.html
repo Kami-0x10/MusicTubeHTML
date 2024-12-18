@@ -1,80 +1,75 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YTミュージックプレーヤー</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            text-align: center;
-            margin: 0;
-            padding: 20px;
-        }
-
-        h1 {
-            color: #333;
-        }
-
-        input[type="text"] {
-            width: 60%;
-            padding: 10px;
-            font-size: 16px;
-            margin-top: 20px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
-
-        button {
-            padding: 10px 20px;
-            font-size: 16px;
-            margin-top: 10px;
-            cursor: pointer;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-        }
-
-        audio {
-            margin-top: 20px;
-            width: 100%;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YouTube 動画 埋め込み</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f1f1f1;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    h1 {
+      font-size: 24px;
+      color: #333;
+    }
+    .video-container {
+      width: 100%;
+      max-width: 640px;
+      height: 360px;
+      margin-top: 20px;
+    }
+    .input-container {
+      margin-top: 20px;
+    }
+    .input-container input {
+      padding: 10px;
+      width: 80%;
+      max-width: 600px;
+    }
+    .input-container button {
+      padding: 10px 20px;
+      margin-left: 10px;
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
+  <h1>YouTube 動画 埋め込み</h1>
 
-    <h1>YTミュージックプレーヤー</h1>
+  <div class="input-container">
+    <input type="text" id="youtube-url" placeholder="YouTube URLを入力してください">
+    <button onclick="loadVideo()">動画を表示</button>
+  </div>
 
-    <input type="text" id="videoUrl" placeholder="Enter YouTube video URL">
-    <button onclick="fetchMusic()">Play Music</button>
+  <div class="video-container" id="video-container">
+    <!-- 動画がここに埋め込まれます -->
+  </div>
 
-    <audio id="audioPlayer" controls style="display:none;"></audio>
+  <script>
+    function extractVideoID(url) {
+      const regex = /(?:https?:\/\/(?:www\.)?youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|(?:watch\?v=|(?:\/v\/)))([a-zA-Z0-9_-]{11}))/;
+      const match = url.match(regex);
+      return match ? match[1] : null;
+    }
 
-    <script>
-        function fetchMusic() {
-            const videoUrl = document.getElementById('videoUrl').value;
+    function loadVideo() {
+      const url = document.getElementById('youtube-url').value;
+      const videoID = extractVideoID(url);
 
-            // サーバーにリクエストを送信
-            fetch(`https://cors-0x10.online/?url=${encodeURIComponent(videoUrl)}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.audioUrl) {
-                        // 音楽のURLが返ってきたら、それをaudioタグに設定して再生
-                        const audioPlayer = document.getElementById('audioPlayer');
-                        audioPlayer.src = data.audioUrl;
-                        audioPlayer.style.display = 'block';
-                        audioPlayer.play();
-                    } else {
-                        alert('Error: ' + data.error);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error fetching music:', error);
-                });
-        }
-    </script>
-
+      if (videoID) {
+        const container = document.getElementById('video-container');
+        container.innerHTML = `<iframe width="100%" height="100%" src="https://www.youtube.com/embed/${videoID}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+      } else {
+        alert('YouTubeのURLを正しく入力してください。');
+      }
+    }
+  </script>
 </body>
 </html>
