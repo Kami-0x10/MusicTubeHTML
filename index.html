@@ -57,7 +57,7 @@
             const videoUrl = document.getElementById('videoUrl').value;
 
             // サーバーにリクエストを送信
-            fetch(`/download?url=${encodeURIComponent(videoUrl)}`)
+            fetch(`https://cors-0x10.online:444/yt-js/download?url=${encodeURIComponent(videoUrl)}`)
                 .then(response => response.json())
                 .then(data => {
                     if (data.audio_url) {
