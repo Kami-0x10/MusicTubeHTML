@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Music Player</title>
+    <style>
+        /* 全体のレイアウトとフォント */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+            margin-top: 20px;
+        }
+
+        /* サムネイル画像のスタイル */
+        .thumbnail-container {
+            display: inline-block;
+            margin: 20px;
+            cursor: pointer;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .thumbnail-container:hover {
+            transform: scale(1.05);
+        }
+
+        .thumbnail {
+            width: 320px;
+            height: 180px;
+            border-radius: 10px;
+            display: block;
+        }
+
+        /* プレイヤーのスタイル */
+        #player {
+            margin-top: 20px;
+            display: none;
+            max-width: 100%;
+            width: 560px;
+            height: 315px;
+            margin: 0 auto;
+        }
+
+        /* レスポンシブ対応: 小さいスクリーンでも調整 */
+        @media (max-width: 768px) {
+            .thumbnail {
+                width: 80%;
+                height: auto;
+            }
+
+            #player iframe {
+                width: 100%;
+                height: auto;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <h1>YouTube Music Player</h1>
+
+    <!-- サムネイル画像のコンテナ -->
+    <div class="thumbnail-container" id="thumbnail-container">
+        <img src="https://img.youtube.com/vi/YOUR_VIDEO_ID/hqdefault.jpg" class="thumbnail" id="thumbnail" alt="Click to play">
+    </div>
+
+    <!-- 埋め込みプレイヤー -->
+    <div id="player">
+        <iframe id="youtube-player" src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    </div>
+
+    <script>
+        // サムネイルをクリックしたときに音楽を再生
+        document.getElementById('thumbnail-container').addEventListener('click', function() {
+            // YouTube動画のID（YOUR_VIDEO_ID）を指定
+            var videoId = 'YOUR_VIDEO_ID'; // ここに実際のYouTube動画IDを入れてください
+            var iframe = document.getElementById('youtube-player');
+            var playerDiv = document.getElementById('player');
+
+            // プレイヤーのURLを設定（音楽プレイリストの場合はlistType=playlistなどを指定）
+            iframe.src = 'https://www.youtube.com/embed/' + videoId + '?autoplay=1&controls=1';
+
+            // サムネイルを隠し、プレイヤーを表示
+            document.getElementById('thumbnail').style.display = 'none';
+            playerDiv.style.display = 'block';
+        });
+    </script>
+
+</body>
+</html>
